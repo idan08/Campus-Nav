@@ -9,6 +9,23 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
+// Call getLocation to initiate the geolocation process
+getLocation();
+
+function cleanView() {
+  console.log('Clean View button clicked');
+  app.cleanView()
+  app.setRotateAnimationMode(false);
+  app.controls.autoRotate = false;
+  if (app.arrowHelper) {
+    app.scene.remove(app.arrowHelper);
+  }
+  if (timeout_id !== null) {
+    clearTimeout(timeout_id);
+  }
+}
+
+
 document.addEventListener('DOMContentLoaded', function () {
   const uiContainer = document.querySelector('.ui-buttons-container');
 
@@ -126,12 +143,15 @@ let timeout_id = null; // global for last timeout id to be cleared
 let app = window.Q3D.application;
 // Clears any ongoing highlights or animations
 function resetHighlights() {
+  // Reset the rotation speed to default before applying new value
+  app.controls.autoRotateSpeed = 0; // Reset to halt any ongoing rotation quickly
+  app.renderer.render(app.scene, app.camera); // Immediate render to apply the reset
   if (app && app.scene && app.arrowHelper) {
     app.scene.remove(app.arrowHelper);
     app.arrowHelper = null;
   }
 
-  if (timeout_id) {
+  if (timeout_id !== null) {
     clearTimeout(timeout_id);
   }
 
@@ -288,19 +308,5 @@ function showError(error) {
     case error.UNKNOWN_ERROR:
       console.error("An unknown error occurred.");
       break;
-  }
-}
-
-// Call getLocation to initiate the geolocation process
-getLocation();
-
-function cleanView() {
-  console.log('Clean View button clicked');
-  app.cleanView()
-  app.setRotateAnimationMode(false);
-
-  if (app.arrowHelper) {
-    app.scene.remove(app.arrowHelper);
-
   }
 }
