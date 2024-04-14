@@ -1,0 +1,196 @@
+/* Assuming this style for your Clear View button */
+#cleanViewBtn {
+  padding: 0.375rem 0.75rem; /* Adjust the padding as needed */
+  font-size: 1rem; /* Set a font size if needed */
+  border-radius: 15px; /* Adjust for rounded corners */
+  border: 2px solid #007bff; /* Blue border */
+  background-color: #f8f8f8; /* White background */
+  /* Other styles... */
+}
+
+
+
+/* Add a margin between dropdown buttons */
+.ui-buttons-container .dropdown {
+  margin-right: 10px; /* Adjust the margin as needed */
+}
+
+
+
+/* Apply the same dimensions and border radius to your dropdown buttons */
+.ui-buttons-container .dropdown .btn-primary {
+  padding: 0.455rem 0.75rem; /* Match the padding of the Clear View button */
+  font-size: 1rem; /* Match the font size of the Clear View button if set */
+  border-radius: 15px; /* Match the border radius for rounded corners */
+  border: 2px solid #007bff; /* Match the border style if any */
+  /* Ensure the background and border colors match the Clear View button */
+  background-color: #fff;
+  border-color: #007bff;
+  /* Other styles... */
+}
+
+
+
+
+/* Dropdown Menu Items */
+/* Style for the dropdown item buttons */
+.dropdown-item {
+  position: relative; /* Establish a positioning context */
+  background-color: transparent;
+  border: none; /* Removes the border from the button if not needed */
+  overflow: hidden; /* Ensures the pseudo-element does not extend beyond the button's area */
+  transition: background-color 0.3s; /* Smooth transition for background color */
+}
+
+/* Pseudo-element for the hover background */
+.dropdown-item::before {
+  content: '';
+  position: absolute;
+  top: 0;-color: rgba(255, 255, 255, 0.2); /* Semi-transparent background for the ps
+  right: 0;
+  bottom: 0;
+  left: 0;
+  backgroundeudo-element */
+  opacity: 0; /* The pseudo-element is initially fully transparent */
+  transition: opacity 0.3s, backdrop-filter 0.3s; /* Smooth transitions for opacity and backdrop-filter */
+}
+
+/* Hover state for the dropdown item */
+.dropdown-item:hover::before {
+  opacity: 1; /* Make the pseudo-element visible */
+  backdrop-filter: blur(10px); /* Apply the blur effect */
+}
+
+
+.dropdown-item {
+  background-color: transparent; /* Make dropdown items background transparent */
+  transition: background-color 0.3s ease, filter 0.3s ease; /* Smooth transition for background and filter effects */
+}
+
+/* Dropdown Menu Items Hover State */
+.dropdown-item:hover {
+  background-color: rgba(255, 255, 255, 0.0); /* Semi-transparent background on hover for better visibility */
+  
+}
+
+/* Dropdown Menu Background */
+.dropdown-menu {
+  background-color: rgba(255, 255, 255, 0); /* Fully transparent background for the dropdown */
+  backdrop-filter: blur(10px); /* Apply a blur effect to the background behind the dropdown */
+}
+
+.dropdown-item {
+  display: block; /* ensures each item is on a new line */
+  width: 100%; /* makes sure each item takes up the full width of the dropdown */
+  clear: both; /* clears the floated elements, if any */
+  /* Other styles for padding, font, etc. */
+}
+.dropdown-item {
+  white-space: nowrap; /* prevents text from wrapping */
+  overflow: hidden; /* hides text that overflows the container's width */
+  text-overflow: ellipsis; /* adds an ellipsis to indicate there's more text */
+}
+.dropdown-menu {
+  min-width: 200px; /* Adjust as necessary */
+}
+
+
+
+
+.dropdown-menu {
+  display: none;
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+#toolbar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1050; /* Ensure it's above the map */
+}
+/* Reset some basic elements */
+body, h1, h2, h3, h4, h5, h6, p, ul {
+  margin: 0;
+  padding: 0;
+}
+
+/* Use a more readable font */
+body {
+  font-family: Arial, sans-serif;
+}
+
+/* Style for the UI buttons container */
+.ui-buttons-container {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  background-color: transparent;
+}
+
+/* Dropdown Styles */
+.ui-buttons-container .dropdown {
+  display: inline-block; /* Align dropdowns in line */
+}
+
+.ui-buttons-container .dropdown .btn-primary {
+  border-radius: 20px; /* Rounded corners for the dropdown button */
+  background-color: #dddfe1; /* Primary color */
+  border: none; /* Remove border */
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16); /* Slight shadow for depth */
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.ui-buttons-container .dropdown .btn-primary:hover,
+.ui-buttons-container .dropdown .btn-primary:focus {
+  outline: none; /* Remove outline on focus */
+   box-shadow: none; /* Or any other styles that are applied on focus */
+   /* Or your default background color */
+  /* Reset other properties as needed to match the non-focused state */
+  color: #fff;
+  background-color: #007bff;
+}
+
+.ui-buttons-container .dropdown-menu {
+  border-radius: 10px; /* Rounded corners for the dropdown menu */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175); /* Dropdown shadow for depth */
+  border: none; /* Remove border */
+  margin-top: 0.5rem; /* Add a little space between button and dropdown */
+}
+
+.ui-buttons-container .dropdown-item {
+  padding: 0.75rem 1.5rem; /* Padding for dropdown items */
+  margin: 0; /* Remove margins */
+  background-color: none; /* Background color for dropdown items */
+  color: #333; /* Text color for dropdown items */
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.ui-buttons-container .dropdown-item:hover,
+.ui-buttons-container .dropdown-item:focus {
+  background-color: none; /* Light background color on hover */
+  color: #007bff; /* Text color change on hover */
+}
+
+/* Style adjustments for the Clear View button */
+#cleanViewBtn {
+  border: 2px solid #007bff;
+  background-color: #fff;
+  color: #007bff;
+  padding: 0.375rem 0.75rem;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+#cleanViewBtn:hover {
+  background-color: #007bff;
+  color: #fff;
+}
+
+/* Additional custom styles can go below */
+/* ... (any other custom styles you have) ... */

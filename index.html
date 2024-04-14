@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>CampusNav</title>
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <base target="_blank">
+  <link rel="stylesheet" type="text/css" href="./Qgis2threejs.css">
+  <link rel="stylesheet" type="text/css" href="custom-ui.css">
+  <style type="text/css">
+    #popup,
+    #header,
+    #layerpanel {
+      left: 36px;
+    }
+  </style>
+
+
+  <!-- Include proj4 from CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.7.5/proj4.js"></script>
+
+  <!-- jQuery library -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+
+  <!-- Popper JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+  <!-- Bootstrap JavaScript -->
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/18.6.4/tween.umd.js"></script>
+  <script src="lessonData.js"></script>
+  <script src="dbData.js"></script>
+  <script src="./threejs/three.min.js"></script>
+  <script src="./threejs/OrbitControls.js"></script>
+  <script src="./threejs/ViewHelper.js"></script>
+  <script type="module" src="./Qgis2threejs.js"></script>
+  <script src="database.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.110.0/examples/js/loaders/GLTFLoader.js"></script>
+
+  <!-- UI JavaScript -->
+  <script type="module" src="ui.js"></script>
+
+</head>
+
+<body>
+  <div class="ui-buttons-container">
+    <!-- This container will be populated dynamically by ui.js -->
+  </div>
+
+  <divs id="view">
+    <div id="northarrow"></div>
+    <div id="navigation"></div>
+  </divs>
+
+  <!-- popup -->
+  <div id="popup">
+    <div id="closebtn">&times;</div>
+    <div id="popupbar"></div>
+    <div id="popupbody">
+      <div id="popupcontent"></div>
+
+      <!-- query result -->
+      <div id="queryresult">
+        <table id="qr_coords_table">
+          <caption>Clicked coordinates <div id="zoomtopoint" class="action-zoom zoombtn"></div>
+          </caption>
+          <tr>
+            <td id="qr_coords"></td>
+          </tr>
+        </table>
+
+        <table id="qr_layername_table">
+          <caption>Layer <div id="zoomtolayer" class="action-zoom zoombtn"></div>
+          </caption>
+          <tr>
+            <td id="qr_layername"></td>
+          </tr>
+        </table>
+
+        <table id="qr_attrs_table">
+          <caption>Attributes</caption>
+        </table>
+
+        <!-- camera actions and measure tool -->
+        <div id="orbitbtn" class="action-btn action-orbit">Orbit</div>
+        <div id="measurebtn" class="action-btn">Measure distance</div>
+      </div>
+
+      <!-- page info -->
+      <div id="pageinfo">
+        <h1>Current View URL</h1>
+        <div><input id="urlbox" type="text"></div>
+
+        <h1>Usage</h1>
+        <table id="usage">
+          <tr>
+            <td colspan="2" class="star">Mouse</td>
+          </tr>
+          <tr>
+            <td>Left button + Move</td>
+            <td>Orbit</td>
+          </tr>
+          <tr>
+            <td>Mouse Wheel</td>
+            <td>Zoom</td>
+          </tr>
+          <tr>
+            <td>Right button + Move</td>
+            <td>Pan</td>
+          </tr>
+
+          <tr>
+            <td colspan="2" class="star">Keys</td>
+          </tr>
+          <tr>
+            <td>Arrow keys</td>
+            <td>Move Horizontally</td>
+          </tr>
+          <tr>
+            <td>Shift + Arrow keys</td>
+            <td>Orbit</td>
+          </tr>
+          <tr>
+            <td>Ctrl + Arrow keys</td>
+            <td>Rotate</td>
+          </tr>
+          <tr>
+            <td>Shift + Ctrl + Up / Down</td>
+            <td>Zoom In / Out</td>
+          </tr>
+          <tr>
+            <td>L</td>
+            <td>Toggle Label Visibility</td>
+          </tr>
+          <tr>
+            <td>R</td>
+            <td>Start / Stop Orbit Animation</td>
+          </tr>
+          <tr>
+            <td>W</td>
+            <td>Wireframe Mode</td>
+          </tr>
+          <tr>
+            <td>Shift + R</td>
+            <td>Reset Camera Position</td>
+          </tr>
+          <tr>
+            <td>Shift + S</td>
+            <td>Save Image</td>
+          </tr>
+        </table>
+
+
+      </div>
+    </div>
+  </div>
+
+  <!-- progress bar -->
+  <div id="progress">
+    <div id="progressbar"></div>
+  </div>
+
+  <!-- menu -->
+  <div id="toolbtns">
+    <div id="layerbtn"></div>
+    <div id="animbtn" class="hidden"></div>
+    <div id="infobtn"></div>
+  </div>
+
+  <!-- header and footer -->
+  <div id="header"></div>
+  <div id="footer"></div>
+
+  <!-- layer panel -->
+  <div id="layerpanel">
+    <div id="layerlist"></div>
+  </div>
+
+  <!-- animation -->
+  <div id="narrativebox" class="ef1">
+    <div id="narbody">
+
+    </div>
+    <div id="nextbtn"></div>
+  </div>
+
+  <div id="toolbar" style="position: absolute; top: 10px; right: 10px; z-index: 100;">
+    <button id="cleanViewBtn">Clear View</button>
+  </div>
+
+  <!-- Additional Script for Q3D configuration as a Module -->
+  <script type="module">
+    Q3D = window.Q3D;
+    Q3D.Config.allVisible = true;
+    Q3D.Config.viewpoint = {
+      lookAt: { x: 3871086.5795361446, y: 3765256.8167663324, z: 0.0 },
+      pos: { x: 3871086.5795361446, y: 3764364.2173590357, z: 892.5994072966278 }
+    };
+    Q3D.Config.localMode = true;
+    Q3D.Config.northArrow.enabled = true;
+    Q3D.Config.northArrow.color = 0x661f33;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      var container = document.getElementById("view"),
+        app = Q3D.application,
+        gui = Q3D.gui;
+
+      app.init(container); // initialize viewer
+
+      // load the scene
+      app.loadSceneFile("./data/index/scene.js", function (scene) {
+        // scene file has been loaded
+        app.start();
+      }, function (scene) {
+        // all relevant files have been loaded
+      });
+    });
+  </script>
+</body>
+
+</html>
