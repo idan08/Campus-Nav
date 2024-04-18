@@ -7,8 +7,30 @@
   background-color: #f8f8f8; /* White background */
   /* Other styles... */
 }
+#notification-popup {
+    display: none;
+    position: fixed;
+    left: 50%;
+    top: 20%;
+    transform: translate(-50%, -20%);
+    z-index: 1000;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    text-align: center; /* Aligns text to center */
+    width: 300px; /* Set a fixed width or percentage as per your requirement */
+  }
 
+  #notification-message {
+    margin-bottom: 20px; /* Gives space between message and button */
+  }
 
+  #close-notification-btn {
+    display: block; /* Block display to fit the full width of its container */
+    margin: 0 auto; /* Auto margins for horizontal centering */
+    padding: 5px 20px; /* Padding inside the button */
+  }
 
 /* Add a margin between dropdown buttons */
 .ui-buttons-container .dropdown {

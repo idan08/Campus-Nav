@@ -8,10 +8,6 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 
-
-// Call getLocation to initiate the geolocation process
-getLocation();
-
 function cleanView() {
   console.log('Clean View button clicked');
   app.cleanView()
@@ -245,6 +241,9 @@ function stopOrbiting(objectToHighlight, center, distance) {
 
 
 
+
+
+// first try of creating a marker for studnets location
 // function createMarkerMaterial() {
 //   console.log("Creating marker material...");
 //   const geometry = new THREE.SphereGeometry(5.05, 32, 32);
@@ -256,7 +255,7 @@ console.log("Setting up projections and materials...");
 const sourceProjection = proj4('EPSG:4326'); // WGS 84
 const destProjection = proj4('EPSG:3857');  // WGS 84 / Pseudo-Mercator
 
-console.log("Starting location fetch process...");
+
 
 function getLocation() {
   console.log("Attempting to fetch the user's location...");
@@ -267,23 +266,58 @@ function getLocation() {
   }
 }
 
+// Fetch user location and check against plane bounds
 function showPosition(position) {
-  console.log("Position obtained:", position);
   const { latitude, longitude } = position.coords;
   const convertedCoords = proj4(sourceProjection, destProjection, [longitude, latitude]);
-  console.log("Converted coordinates:", convertedCoords);
+  //const userLocationVector = new THREE.Vector3(convertedCoords[0], convertedCoords[1], 4.7);
+  const userLocationVector = new THREE.Vector3(4000000.42, 4000000.57, 4.7);//Debugging outside of plane boundries
+  //const userLocationVector = new THREE.Vector3(3871293.42, 3765441.57, 4.7); //Debugging  - use fixed coordinates instead of GPS data
+  const planeConfig = getPlaneConfig();
+  if (planeConfig && isWithinPlaneBounds(userLocationVector, planeConfig)) {
+    console.log("User is within the plane bounds.");
+    addUserModel(userLocationVector);
+  } else {
+    console.log("User is outside the plane bounds.");
+    showNotification("You are outside the plane bounds.");
+  }
+}
 
-  const userLocationVector = new THREE.Vector3(convertedCoords[0], convertedCoords[1], 4.7); // Adjust Z as needed
-  console.log("Vector3 created for user location:", userLocationVector);
+function showNotification(message) {
+  document.getElementById('notification-message').innerText = message;
+  document.getElementById('notification-popup').style.display = 'block';
+}
 
-  // Initialize the loader within the function scope
+function closeNotification() {
+  document.getElementById('notification-popup').style.display = 'none';
+}
+
+// Add event listeners once the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', function () {
+  document.getElementById('close-notification-btn').addEventListener('click', closeNotification);
+});
+
+// Check if user location is within plane bounds
+function isWithinPlaneBounds(userLocationVector, planeConfig) {
+  const halfWidth = planeConfig.width / 2;
+  const halfHeight = planeConfig.height / 2;
+  const centerX = planeConfig.center[0];
+  const centerY = planeConfig.center[1];
+
+  return (
+    userLocationVector.x >= centerX - halfWidth && userLocationVector.x <= centerX + halfWidth &&
+    userLocationVector.y >= centerY - halfHeight && userLocationVector.y <= centerY + halfHeight
+  );
+}
+
+function addUserModel(userLocationVector) {
+  // Load the student model and add it to the scene
   const loader = new THREE.GLTFLoader();
   loader.load('student_icon.glb', function (gltf) {
     const model = gltf.scene;
-    model.scale.set(10, 10, 10);  // Adjust scale as needed
-    // Rotate the model to stand upright. Adjust the angle as needed.
-    model.rotation.x = Math.PI / 2; // Rotate 90 degrees around the X-axis
-    model.position.copy(userLocationVector);  // Position the model
+    model.scale.set(10, 10, 10); // Adjust scale as needed
+    model.rotation.x = Math.PI / 2; // Adjust rotation as needed to stand upright
+    model.position.copy(userLocationVector); // Position the model
     Q3D.application.scene.add(model);
     console.log("Student model added to the scene");
 
@@ -310,3 +344,54 @@ function showError(error) {
       break;
   }
 }
+
+// Get Plane Configuration with correct transformations
+function getPlaneConfig() {
+  let layer7 = null;
+  let flatPlaneLayer = null;
+
+  Q3D.application.scene.traverse(function (object) {
+    if (object.isMesh) {
+      if (object.userData.layerId === 7) {
+        layer7 = object;
+      }
+      if (object.userData.layerId === 30) {
+        flatPlaneLayer = object;
+      }
+    }
+  });
+
+  if (!layer7 || !flatPlaneLayer) {
+    console.error("Required layers not found.");
+    return null;
+  }
+  console.log(layer7);
+  const layer7Center = getObjectCenter(layer7);
+  const flatPlaneWidth = flatPlaneLayer.geometry.parameters.width;
+  const flatPlaneHeight = flatPlaneLayer.geometry.parameters.height;
+
+  return {
+    width: flatPlaneWidth,
+    height: flatPlaneHeight,
+    center: [layer7Center.x, layer7Center.y],
+    zScale: 1 // Assuming no vertical scaling for simplicity
+  };
+}
+
+function getObjectCenter(object) {
+  if (object.geometry && object.geometry.boundingSphere) {
+    const center = object.geometry.boundingSphere.center.clone(); // Cloning to avoid direct reference changes
+    return center;
+  } else {
+    console.error('Bounding sphere not found for the object');
+    return new THREE.Vector3(); // Return a default center if not found
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  Q3D.application.addEventListener("sceneLoaded", function () {
+    console.log("Scene fully loaded, now fetching user location...");
+    getLocation();
+  });
+});
+
