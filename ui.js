@@ -270,8 +270,8 @@ function getLocation() {
 function showPosition(position) {
   const { latitude, longitude } = position.coords;
   const convertedCoords = proj4(sourceProjection, destProjection, [longitude, latitude]);
-  //const userLocationVector = new THREE.Vector3(convertedCoords[0], convertedCoords[1], 4.7);
-  const userLocationVector = new THREE.Vector3(4000000.42, 4000000.57, 4.7);//Debugging outside of plane boundries
+  const userLocationVector = new THREE.Vector3(convertedCoords[0], convertedCoords[1], 4.7);
+  //const userLocationVector = new THREE.Vector3(4000000.42, 4000000.57, 4.7);//Debugging outside of plane boundries
   //const userLocationVector = new THREE.Vector3(3871293.42, 3765441.57, 4.7); //Debugging  - use fixed coordinates instead of GPS data
   const planeConfig = getPlaneConfig();
   if (planeConfig && isWithinPlaneBounds(userLocationVector, planeConfig)) {
