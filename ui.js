@@ -225,14 +225,13 @@ function highlightsFeature(buildingNumber, roomNumber) {
 
   // Only process notifications for specific rooms
   if (roomNumber !== undefined && roomNumber !== null) {
-    handleRoomHighlight(objectToHighlight);
-  } else {
-    // Handle building highlighting logic if necessary
     handleBuildingHighlight(buildingNumber);
+    handleRoomHighlight(objectToHighlight);
   }
 }
 
 function handleRoomHighlight(object) {
+  // Find the building object to temporarily hide
   const description = object.userData.properties[1];
   const building = object.userData.properties[2];
   const room = object.userData.properties[5];
@@ -249,7 +248,7 @@ const MAX_FLOOR = 4;
 function extractFloorNumber(roomNumber) {
   const floorDigit = roomNumber.toString().charAt(0);
   const floor = parseInt(floorDigit, 10);
-  return (floor >= MIN_FLOOR && floor <= MAX_FLOOR) ? floor : MIN_FLOOR;
+  return (floor >= MIN_FLOOR && floor <= MAX_FLOOR) ? floor : '1';
 }
 
 function handleBuildingHighlight(buildingNumber) {
