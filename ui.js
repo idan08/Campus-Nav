@@ -249,7 +249,7 @@ const MAX_FLOOR = 4;
 function extractFloorNumber(roomNumber) {
   const floorDigit = roomNumber.toString().charAt(0);
   const floor = parseInt(floorDigit, 10);
-  return (floor >= MIN_FLOOR && floor <= MAX_FLOOR) ? floor : 'MIN_FLOOR';
+  return (floor >= MIN_FLOOR && floor <= MAX_FLOOR) ? floor : MIN_FLOOR;
 }
 
 function handleBuildingHighlight(buildingNumber) {
