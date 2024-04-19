@@ -216,34 +216,48 @@ function highlightsFeature(buildingNumber, roomNumber) {
   resetHighlights(); // Clear previous highlights and animations
   let objectToHighlight = findObject(buildingNumber, roomNumber);
 
-
-  // Check if roomNumber is not null, which means we are highlighting a specific room
-  if (roomNumber !== undefined && roomNumber !== null) {
-    // Find the building object to temporarily hide
-    buildingObjToTempRemove = findObject(buildingNumber, null);
-
-    // Temporarily hide the building object if found
-    if (buildingObjToTempRemove) {
-      buildingObjToTempRemove.visible = false;
-    }
+  if (!objectToHighlight) {
+    console.log("No matching object found.");
+    return;
   }
 
-  if (objectToHighlight) {
-    highlightAndFocusOnObject(objectToHighlight);
-    if (roomNumber !== undefined && roomNumber !== null) {
-      // Extract room details from userData
-      const description = objectToHighlight.userData.properties[1];
-      const building = objectToHighlight.userData.properties[2];
-      const room = objectToHighlight.userData.properties[5];
-      const floor = room.substring(0, 1); // Get the first digit of the room number for floor level
-      // Construct notification message
-      const notificationMessage = `Hey! \n Please head to: ${description} \n in building: ${building} \n floor number: ${floor} \n Class number: ${room}`;
+  highlightAndFocusOnObject(objectToHighlight);
 
-      // Show notification
-      showNotification(notificationMessage);
-    }
+  // Only process notifications for specific rooms
+  if (roomNumber !== undefined && roomNumber !== null) {
+    handleRoomHighlight(objectToHighlight);
   } else {
-    console.log("No matching object found.");
+    // Handle building highlighting logic if necessary
+    handleBuildingHighlight(buildingNumber);
+  }
+}
+
+function handleRoomHighlight(object) {
+  const description = object.userData.properties[1];
+  const building = object.userData.properties[2];
+  const room = object.userData.properties[5];
+
+  const floor = extractFloorNumber(room);
+
+  const notificationMessage = `Hey! \n Please head to: ${description} \n in building: ${building}\n floor number: ${floor} \n Class number: ${room}`;
+  showNotification(notificationMessage);
+}
+
+const MIN_FLOOR = 1;
+const MAX_FLOOR = 4;
+
+function extractFloorNumber(roomNumber) {
+  const floorDigit = roomNumber.toString().charAt(0);
+  const floor = parseInt(floorDigit, 10);
+  return (floor >= MIN_FLOOR && floor <= MAX_FLOOR) ? floor : 'MIN_FLOOR';
+}
+
+function handleBuildingHighlight(buildingNumber) {
+  // Find and temporarily hide the building object
+  buildingObjToTempRemove = findObject(buildingNumber, null);
+  if (buildingObjToTempRemove) {
+    buildingObjToTempRemove.visible = false;
+    // Remember to reset visibility later if needed
   }
 }
 
