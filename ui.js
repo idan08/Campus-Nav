@@ -1,4 +1,5 @@
-
+// in global scope so we could return mesh to visable from any function in case of interruption. 
+let buildingObjToTempRemove = null;
 
 document.addEventListener('DOMContentLoaded', function () {
   const cleanViewBtn = document.getElementById('cleanViewBtn');
@@ -13,12 +14,16 @@ function cleanView() {
   app.cleanView()
   app.setRotateAnimationMode(false);
   app.controls.autoRotate = false;
+  if (buildingObjToTempRemove) {
+    buildingObjToTempRemove.visible = true;
+  }
   if (app.arrowHelper) {
     app.scene.remove(app.arrowHelper);
   }
   if (timeout_id !== null) {
     clearTimeout(timeout_id);
   }
+  closeNotification()
 }
 
 
@@ -111,8 +116,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (e.target.classList.contains('dropdown-item')) {
       const buildingNumber = e.target.dataset.building;
       const roomNumber = e.target.dataset.room;
-
-      if (roomNumber !== undefined) {
+      if (roomNumber !== "undefined" && roomNumber.trim() !== "") {
         // It's a course item
         console.log('Course clicked: Building number:', buildingNumber, 'Room number:', roomNumber);
         // Call highlighting function for room
@@ -132,11 +136,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-//UNDER CONSTERCTION
-//--------------------------------
+
+//-------------------------------- HIGHLIGHTS  FEATURE --------------------------------
 
 let timeout_id = null; // global for last timeout id to be cleared
 let app = window.Q3D.application;
+
 // Clears any ongoing highlights or animations
 function resetHighlights() {
   // Reset the rotation speed to default before applying new value
@@ -150,28 +155,41 @@ function resetHighlights() {
   if (timeout_id !== null) {
     clearTimeout(timeout_id);
   }
-
+  if (buildingObjToTempRemove) {
+    buildingObjToTempRemove.visible = true;
+  }
   app.setRotateAnimationMode(false); // Ensure no orbit animation is running
   app.controls.autoRotate = false; // Disable auto-rotate
 }
 
 
-// Finds and returns the object with matching building and room number
-function findObjectToHighlight(buildingNumber, roomNumber) {
+// Finds and returns the object with matching building number or ID
+function findObject(buildingNumber, roomNumber) {
   let objectToHighlight = null;
-
   app.scene.traverse(function (object) {
     if (object.isMesh && object.userData && object.userData.properties) {
       let properties = object.userData.properties;
-      if (properties[2] == buildingNumber && (!roomNumber || properties[5] == roomNumber)) {
-        objectToHighlight = object;
-        return true; // Found the object, stop traversing
+
+
+      // If roomNumber is not provided, search for a building with the given buildingNumber
+      if ((roomNumber === undefined || roomNumber === null) && properties.length === 1) {
+        if (properties[0] == buildingNumber) {
+          objectToHighlight = object;
+          return true; // Found the building object, stop traversing
+        }
+      } else {
+        // If roomNumber is provided, search for a specific room within the building
+        if (properties[2] == buildingNumber && properties[5] == roomNumber) {
+          objectToHighlight = object;
+          return true; // Found the room object, stop traversing
+        }
       }
     }
   });
 
   return objectToHighlight;
 }
+
 
 function setupArrowHelper(objectToHighlight) {
   let center = objectToHighlight.geometry.boundingSphere.center;
@@ -193,16 +211,55 @@ function setupArrowHelper(objectToHighlight) {
   app.scene.add(app.arrowHelper);
 }
 
+
 function highlightsFeature(buildingNumber, roomNumber) {
   resetHighlights(); // Clear previous highlights and animations
-  let objectToHighlight = findObjectToHighlight(buildingNumber, roomNumber);
+  let objectToHighlight = findObject(buildingNumber, roomNumber);
+
+
+  // Check if roomNumber is not null, which means we are highlighting a specific room
+  if (roomNumber !== undefined && roomNumber !== null) {
+    // Find the building object to temporarily hide
+    buildingObjToTempRemove = findObject(buildingNumber, null);
+
+    // Temporarily hide the building object if found
+    if (buildingObjToTempRemove) {
+      buildingObjToTempRemove.visible = false;
+    }
+  }
 
   if (objectToHighlight) {
     highlightAndFocusOnObject(objectToHighlight);
+    if (roomNumber !== undefined && roomNumber !== null) {
+      // Extract room details from userData
+      const description = objectToHighlight.userData.properties[1];
+      const building = objectToHighlight.userData.properties[2];
+      const room = objectToHighlight.userData.properties[5];
+      const floor = room.substring(0, 1); // Get the first digit of the room number for floor level
+      // Construct notification message
+      const notificationMessage = `Hey! \n Please head to: ${description} \n in building: ${building} \n floor number: ${floor} \n Class number: ${room}`;
+
+      // Show notification
+      showNotification(notificationMessage);
+    }
   } else {
     console.log("No matching object found.");
   }
-};
+}
+
+function findObjectByLayerId(layerId) {
+  let foundObject = null;
+
+  // Assuming 'app.scene' is your main scene object
+  app.scene.traverse(function (object) {
+    if (object.userData && object.userData.layerId === layerId) {
+      foundObject = object;
+      return foundObject;  // If you only need the first match, you can return early
+    }
+  });
+
+  return foundObject;  // Returns the found object or null if not found
+}
 
 function highlightAndFocusOnObject(objectToHighlight) {
   let center = objectToHighlight.geometry.boundingSphere.center;
@@ -224,24 +281,22 @@ function highlightAndFocusOnObject(objectToHighlight) {
   // Set a timeout to stop orbiting after 10 seconds
   timeout_id = setTimeout(function () {
     stopOrbiting(objectToHighlight, center, distance);
+    if (buildingObjToTempRemove) {
+      buildingObjToTempRemove.visible = true;
+    }
   }, 10000);
 }
 
 function stopOrbiting(objectToHighlight, center, distance) {
-  console.log(`Stopped orbiting with timeout_id: ${timeout_id}`);
   app.setRotateAnimationMode(false);
   app.controls.autoRotate = false;
   app.renderer.render(app.scene, app.camera);
-  console.log("Camera has stopped orbiting.");
-
+  console.log(`Camera has Stopped orbiting with timeout_id: ${timeout_id}`);
   // Re-center on object at the end of orbit animation
   app.cameraAction.zoom(center.x, center.y, center.z, distance);
   app.highlightFeature(objectToHighlight);
 }
-
-
-
-
+//-------------------------------- USER LOCATION ---------------------------------------------------
 
 // first try of creating a marker for studnets location
 // function createMarkerMaterial() {
@@ -250,6 +305,7 @@ function stopOrbiting(objectToHighlight, center, distance) {
 //   const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
 //   return new THREE.Mesh(geometry, material);
 // }
+
 console.log("Setting up projections and materials...");
 // Setting up projections outside to be accessible by all functions
 const sourceProjection = proj4('EPSG:4326'); // WGS 84
@@ -347,13 +403,13 @@ function showError(error) {
 
 // Get Plane Configuration with correct transformations
 function getPlaneConfig() {
-  let layer7 = null;
+  let layer = null;
   let flatPlaneLayer = null;
 
   Q3D.application.scene.traverse(function (object) {
     if (object.isMesh) {
       if (object.userData.layerId === 7) {
-        layer7 = object;
+        layer = object;
       }
       if (object.userData.layerId === 30) {
         flatPlaneLayer = object;
@@ -361,19 +417,18 @@ function getPlaneConfig() {
     }
   });
 
-  if (!layer7 || !flatPlaneLayer) {
+  if (!layer || !flatPlaneLayer) {
     console.error("Required layers not found.");
     return null;
   }
-  console.log(layer7);
-  const layer7Center = getObjectCenter(layer7);
+  const layerCenter = getObjectCenter(layer);
   const flatPlaneWidth = flatPlaneLayer.geometry.parameters.width;
   const flatPlaneHeight = flatPlaneLayer.geometry.parameters.height;
 
   return {
     width: flatPlaneWidth,
     height: flatPlaneHeight,
-    center: [layer7Center.x, layer7Center.y],
+    center: [layerCenter.x, layerCenter.y],
     zScale: 1 // Assuming no vertical scaling for simplicity
   };
 }
