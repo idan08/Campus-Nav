@@ -16721,15 +16721,4 @@ app.loadJSONObject({
       ]
     }
   ]
-}); window.setTimeout(function () { app.dispatchEvent({ type: "sceneLoaded" });
-const layers = app.getLayers(); // קבלת כל השכבות
-  layers.forEach(layer => {
-    const features = layer.data.features; // קבלת התכנים בשכבה
-    features.forEach(feature => {
-      const buildingMesh = drawBuildingMesh(feature);
-      
-      // הוספת התווית עם המספר 5
-      addBuildingLabel(buildingMesh, '5');
-    });
-  });
-}, 0);
+}); window.setTimeout(function () { app.dispatchEvent({ type: "sceneLoaded" });}, 0);

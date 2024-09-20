@@ -549,7 +549,7 @@ function onSceneLoaded(scene) {
   scene.traverse(function (object) {
     if (object.type === "Mesh") {
       const buildingProperties = object.userData; // או שיטה אחרת להוציא את פרטי הבניין
-      handleBuildingMesh(object, buildingProperties);
+      // handleBuildingMesh(object, buildingProperties);
     }
   });
 
