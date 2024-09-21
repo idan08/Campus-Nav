@@ -284,6 +284,7 @@ function ViewHelper(editorCamera, container) {
 
 	}
 
+	// Create canvas function
 	function getSpriteMaterial(color, text = null) {
 
 		var canvas = document.createElement('canvas');
@@ -321,3 +322,6 @@ ViewHelper.prototype = Object.assign(Object.create(THREE.Object3D.prototype), {
 	isViewHelper: true
 
 });
+
+export {getSpriteMaterial}
+

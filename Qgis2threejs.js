@@ -471,33 +471,127 @@ Q3D.application
     });
   };
 
-  app.loadSceneFile = function (url, sceneFileLoadedCallback, sceneLoadedCallback) {
+  // Function to add building number 
+// פונקציות ליצירת תוויות
+function createLabelCanvas(text) {
+  const canvas = document.createElement('canvas');
+  const context = canvas.getContext('2d');
+  canvas.width = 256;  // רוחב הקנבס
+  canvas.height = 128; // גובה הקנבס
+  
+  // צבע רקע לשיפור הקריאות של הטקסט
+  context.fillStyle = 'black'; 
+  context.fillRect(0, 0, canvas.width, canvas.height);
 
-    var onload = function () {
-      if (sceneFileLoadedCallback) sceneFileLoadedCallback(app.scene);
-    };
+  context.font = '24px Arial';
+  context.fillStyle = 'white';  // צבע הטקסט
+  context.fillText(text, 10, 40);  // הוספת טקסט עם מיקום מותאם
 
-    if (sceneLoadedCallback) {
-      app.addEventListener("sceneLoaded", function () {
-        sceneLoadedCallback(app.scene);
-      });
+  return canvas;
+}
+
+function addBuildingLabel(buildingMesh, buildingNumber) {
+  console.log("הוספת תווית לבניין עם מספר:", buildingNumber);  // לוג מספר הבניין
+
+  // יצירת הקנבס עם הטקסט
+  const labelCanvas = createLabelCanvas(`Building Number: ${buildingNumber}`);
+  
+  // יצירת טקסטורה מתוך הקנבס
+  const texture = new THREE.CanvasTexture(labelCanvas);
+  
+  // יצירת חומר (material) עבור ה-Sprite עם הטקסטורה שנוצרה
+  const material = new THREE.SpriteMaterial({ map: texture });
+  
+  // יצירת Sprite - אובייקט דו-ממדי שמיועד להציג טקסטורה על מיקום מסוים
+  const sprite = new THREE.Sprite(material);
+
+  // התאמת המיקום של התווית - נניח שהיא מעל הבניין
+  sprite.position.set(0, 50, 0);  // המיקום מעל הבניין
+  sprite.scale.set(50, 25, 1);    // קביעת גודל התווית
+
+  // הוספת התווית לבניין עצמו
+  buildingMesh.add(sprite);
+
+  console.log("תווית נוספה בהצלחה.");  // לוג לאחר הוספת התווית
+
+  // רינדור מחדש אם צריך
+  if (app.renderer && app.scene && app.camera) {
+    app.renderer.render(app.scene, app.camera);
+  } else {
+    console.error("היישום לא מוגדר עם renderer, scene, או camera.");
+  }
+}
+
+// פונקציה לטיפול בבניינים והוספת תוויות
+function handleBuildingMesh(buildingMesh, buildingProperties) {
+  console.log("עובד עם בניין:", buildingProperties); // לוג פרטי הבניין
+
+  // בדוק אם buildingProperties מוגדר ומכיל את ה-properties הנדרשים
+  if (buildingProperties && buildingProperties.properties && buildingProperties.properties.length > 0) {
+    // קבל את מספר הבניין מתוך properties
+    const buildingNumber = buildingProperties.properties[0]; 
+    if (buildingNumber) {
+      console.log("מספר הבניין:", buildingNumber); // לוג מספר הבניין
+      addBuildingLabel(buildingMesh, buildingNumber);
+    } else {
+      console.warn("לא נמצא מספר לבניין:", buildingProperties); // לוג אם מספר הבניין לא נמצא
     }
+  } else {
+    console.error("פרטי הבניין לא תקינים:", buildingProperties); // לוג אם המידע לא תקין
+  }
 
-    var ext = url.split(".").pop();
-    if (ext == "json") app.loadJSONFile(url, onload);
-    else if (ext == "js") {
-      var e = document.createElement("script");
-      e.src = url;
-      e.onload = onload;
-      document.body.appendChild(e);
+  app.renderer.render(app.scene, app.camera);
+}
+
+// פונקציה לעיבוד הסצנה לאחר טעינה
+function onSceneLoaded(scene) {
+  console.log("סצנה נטענה בהצלחה");
+  scene.traverse(function (object) {
+    if (object.type === "Mesh") {
+      const buildingProperties = object.userData; // או שיטה אחרת להוציא את פרטי הבניין
+      // handleBuildingMesh(object, buildingProperties);
     }
+  });
+
+  app.renderer.render(app.scene, app.camera);
+}
+
+// עדכון הפונקציה loadSceneFile
+app.loadSceneFile = function (url, sceneFileLoadedCallback, sceneLoadedCallback) {
+  var onload = function () {
+    console.log("הסצנה נטענה"); // לוג כאשר הסצנה נטענה
+    if (sceneFileLoadedCallback) sceneFileLoadedCallback(app.scene);
   };
 
-  app.loadTextureFile = function (url, callback) {
+  if (sceneLoadedCallback) {
+    app.addEventListener("sceneLoaded", function () {
+      console.log("פונקציית sceneLoadedCallback נקראה לאחר טעינת הסצנה");
+      sceneLoadedCallback(app.scene);
+      onSceneLoaded(app.scene); // הוסף את הקריאה ל-onSceneLoaded כאן
+    });
+  }
+
+  var ext = url.split(".").pop();
+  console.log("סיומת הקובץ היא :", ext); // לוג סיומת הקובץ
+  if (ext == "json") {
+    console.log("טוען קובץ json");
+    app.loadJSONFile(url, onload);
+  } else if (ext == "js") {
+    console.log("טוען קובץ js");
+    var e = document.createElement("script");
+    e.src = url;
+    e.onload = onload;
+    document.body.appendChild(e);
+  }
+
+  app.renderer.render(app.scene, app.camera);
+};
+
+app.loadTextureFile = function (url, callback) {
     return new THREE.TextureLoader(app.loadingManager).load(url, callback);
-  };
+};
 
-  app.loadModelFile = function (url, callback) {
+app.loadModelFile = function (url, callback) {
     var loader,
       ext = url.split(".").pop();
     if (ext == "dae") {
@@ -522,7 +616,7 @@ Q3D.application
         console.log("Failed to load model: " + url);
         app.loadingManager.itemError("M" + url);
       });
-  };
+};
 
   app.loadModelData = function (data, ext, resourcePath, callback) {
 
@@ -4425,7 +4519,6 @@ Q3D.Utils.setGeometryUVs = function (geom, base_width, base_height) {
     geom.faceVertexUvs[0].push([uvs[face.a], uvs[face.b], uvs[face.c]]);
   }
 };
-
 
 // Q3D.Tweens
 Q3D.Tweens = {};
