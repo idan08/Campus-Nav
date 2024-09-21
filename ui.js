@@ -27,8 +27,72 @@ function cleanView() {
 }
 
 
+let isColor=true;
+var originalMaterials = new Map();// Map to store original materials
+
+function colorRedProtectedSafe() {
+  
+  if(isColor){
+  
+  originalMaterials.clear();
+  // First, set all buildings to grey and save original materials
+  app.scene.traverse(function (object) {
+    if (
+      object.isMesh &&
+      object.userData &&
+      object.userData.properties &&
+      object.userData.properties.length > 0
+    ) {
+      if (!originalMaterials.has(object)) {
+        originalMaterials.set(object, object.material); // Save the original material
+        object.material = object.material.clone(); // Clone the material for this mesh
+      }
+      object.material.color.set(0x808080); // Set color to grey
+    }
+  });
+    //colors the protected buildings in red
+   let building6=findObject(6,null);
+   let building1=findObject(1,null);
+   let building5=findObject(5,301);
+   
+   building6.material.color.set(0xff0000); 
+   building1.material.color.set(0xff0000);
+   building5.material.color.set(0xff0000);
+  isColor=false;
+  }
+ // Now, restore the original materials and colors
+ else{
+  app.scene.traverse(function (object) {
+    if (
+      object.isMesh &&
+      object.userData &&
+      object.userData.properties &&
+      object.userData.properties.length > 0
+    ) {
+      if (originalMaterials.has(object)) {
+        object.material = originalMaterials.get(object); // Restore original material
+      }
+    }
+  });
+  isColor=true;
+}
+  
+  app.renderer.render(app.scene, app.camera);
+}
+
 document.addEventListener('DOMContentLoaded', function () {
   const uiContainer = document.querySelector('.ui-buttons-container');
+  //create a emergency button
+  const colorBuildingsRedBtn = document.createElement('button');
+  colorBuildingsRedBtn.className = 'emergencyButton'; // class name
+  colorBuildingsRedBtn.textContent = 'Emergency';
+
+  // Append the button to the UI container
+  uiContainer.appendChild(colorBuildingsRedBtn);
+
+  colorBuildingsRedBtn.addEventListener('click', function () {
+    colorRedProtectedSafe();
+  });
 
   // Function to create a dropdown
   // Function to create a dropdown
