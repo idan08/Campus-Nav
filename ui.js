@@ -23,6 +23,18 @@ function cleanView() {
   if (timeout_id !== null) {
     clearTimeout(timeout_id);
   }
+  app.scene.traverse(function (object) {
+    if (
+      object.isMesh &&
+      object.userData &&
+      object.userData.properties &&
+      object.userData.properties.length > 0
+    ) {
+      if (originalMaterials.has(object)) {
+        object.material = originalMaterials.get(object); // Restore original material
+      }
+    }
+  });
   closeNotification()
 }
 
