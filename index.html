@@ -57,105 +57,60 @@
     <div id="navigation"></div>
   </divs>
 
-  <!-- popup -->
-  <div id="popup">
-    <div id="closebtn">&times;</div>
-    <div id="popupbar"></div>
-    <div id="popupbody">
-      <div id="popupcontent"></div>
+  <div class="popup" id="popup">
+    <div class="close-btn" id="closebtn">&times;</div>
+    <div class="popup-bar" id="popupbar"></div>
+    <div class="popup-body" id="popupbody">
+      <div class="popup-content" id="popupcontent"></div>
 
       <!-- query result -->
-      <div id="queryresult">
-        <table id="qr_coords_table">
-          <caption>Clicked coordinates <div id="zoomtopoint" class="action-zoom zoombtn"></div>
-          </caption>
+      <div class="query-result" id="queryresult">
+        <table class="coords-table" id="qr_coords_table">
+          <caption>Clicked coordinates <div class="action-zoom zoombtn" id="zoomtopoint"></div></caption>
           <tr>
             <td id="qr_coords"></td>
           </tr>
         </table>
 
-        <table id="qr_layername_table">
-          <caption>Layer <div id="zoomtolayer" class="action-zoom zoombtn"></div>
-          </caption>
+        <table class="layername-table" id="qr_layername_table">
+          <caption>Layer <div class="action-zoom zoombtn" id="zoomtolayer"></div></caption>
           <tr>
             <td id="qr_layername"></td>
           </tr>
         </table>
 
-        <table id="qr_attrs_table">
+        <table class="attrs-table" id="qr_attrs_table">
           <caption>Attributes</caption>
         </table>
 
         <!-- camera actions and measure tool -->
-        <div id="orbitbtn" class="action-btn action-orbit">Orbit</div>
-        <div id="measurebtn" class="action-btn">Measure distance</div>
+        <div class="action-btn action-orbit" id="orbitbtn">Orbit</div>
+        <div class="action-btn" id="measurebtn">Measure distance</div>
       </div>
 
       <!-- page info -->
-      <div id="pageinfo">
+      <div class="page-info" id="pageinfo">
         <h1>Current View URL</h1>
-        <div><input id="urlbox" type="text"></div>
+        <div><input class="url-box" id="urlbox" type="text"></div>
 
         <h1>Usage</h1>
-        <table id="usage">
-          <tr>
-            <td colspan="2" class="star">Mouse</td>
-          </tr>
-          <tr>
-            <td>Left button + Move</td>
-            <td>Orbit</td>
-          </tr>
-          <tr>
-            <td>Mouse Wheel</td>
-            <td>Zoom</td>
-          </tr>
-          <tr>
-            <td>Right button + Move</td>
-            <td>Pan</td>
-          </tr>
+        <table class="usage-table" id="usage">
+          <tr><td colspan="2" class="star">Mouse</td></tr>
+          <tr><td>Left button + Move</td><td>Orbit</td></tr>
+          <tr><td>Mouse Wheel</td><td>Zoom</td></tr>
+          <tr><td>Right button + Move</td><td>Pan</td></tr>
 
-          <tr>
-            <td colspan="2" class="star">Keys</td>
-          </tr>
-          <tr>
-            <td>Arrow keys</td>
-            <td>Move Horizontally</td>
-          </tr>
-          <tr>
-            <td>Shift + Arrow keys</td>
-            <td>Orbit</td>
-          </tr>
-          <tr>
-            <td>Ctrl + Arrow keys</td>
-            <td>Rotate</td>
-          </tr>
-          <tr>
-            <td>Shift + Ctrl + Up / Down</td>
-            <td>Zoom In / Out</td>
-          </tr>
-          <tr>
-            <td>L</td>
-            <td>Toggle Label Visibility</td>
-          </tr>
-          <tr>
-            <td>R</td>
-            <td>Start / Stop Orbit Animation</td>
-          </tr>
-          <tr>
-            <td>W</td>
-            <td>Wireframe Mode</td>
-          </tr>
-          <tr>
-            <td>Shift + R</td>
-            <td>Reset Camera Position</td>
-          </tr>
-          <tr>
-            <td>Shift + S</td>
-            <td>Save Image</td>
-          </tr>
+          <tr><td colspan="2" class="star">Keys</td></tr>
+          <tr><td>Arrow keys</td><td>Move Horizontally</td></tr>
+          <tr><td>Shift + Arrow keys</td><td>Orbit</td></tr>
+          <tr><td>Ctrl + Arrow keys</td><td>Rotate</td></tr>
+          <tr><td>Shift + Ctrl + Up / Down</td><td>Zoom In / Out</td></tr>
+          <tr><td>L</td><td>Toggle Label Visibility</td></tr>
+          <tr><td>R</td><td>Start / Stop Orbit Animation</td></tr>
+          <tr><td>W</td><td>Wireframe Mode</td></tr>
+          <tr><td>Shift + R</td><td>Reset Camera Position</td></tr>
+          <tr><td>Shift + S</td><td>Save Image</td></tr>
         </table>
-
-
       </div>
     </div>
   </div>
