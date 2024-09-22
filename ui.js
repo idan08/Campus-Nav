@@ -65,7 +65,7 @@ function colorRedProtectedSafe() {
     //colors the protected buildings in red
    let building6=findObject(6,null);
    let building1=findObject(1,null);
-   let building5=findObject(5,301);
+   let building5=findObject(5,217);
    
    building6.material.color.set(0xff0000); 
    building1.material.color.set(0xff0000);
