@@ -26,6 +26,83 @@ function cleanView() {
   closeNotification()
 }
 
+//creating unordered list of given building db
+
+//adds quicksearch element
+document.addEventListener('DOMContentLoaded',function(){
+  const searchInput = document.getElementById('search-input'); //search bar
+  const searchContainer = document.getElementById('search-container'); //search div container
+  const buildingsList = document.getElementById('building-list'); //list of all buildings from database
+  buildingsList.addEventListener('mouseover',(e)=>{ //when 
+    if(e.target.tagName === 'LI')
+      e.target.style.backgroundColor = '#6bfbe8';
+  });
+  buildingsList.addEventListener('mouseout',(e)=>{
+    if(e.target.tagName === 'LI')
+    e.target.style.backgroundColor = "#ddd";
+  });
+  //quick search creation
+  function createQuickSearch() {
+    db_data.forEach((building) => { //adding every building as a list item
+      let listItem = document.createElement('li');
+      listItem.textContent = building.room_name +" "+building.room_number+" "+building.building;
+      listItem.style.padding = '5px';
+      listItem.style.borderRadius = "10px";
+      listItem.style.textAlign = "right";
+      listItem.style.backgroundColor = "#ddd";
+      listItem.addEventListener('click', () => {
+        selectBuilding(building.room_name,building.building,building.room_number); //name,building num, room number for the zoom in
+        searchInput.value = building.room_name +" "+building.room_number+" "+building.building; //after selecting it will be shown in the input box
+      });
+      buildingsList.appendChild(listItem); 
+    });
+  }
+
+  // Filter buildings based on input
+  function filterBuildings() {
+    const input = searchInput.value.toLowerCase();
+    const listItems = buildingsList.querySelectorAll('li');
+    let matchCount = 0;
+
+    if(input ===''){
+      buildingsList.style.display = 'none'; //hide list if it's empty
+      return;
+    }
+
+    listItems.forEach((item) => {
+      const buildingName = item.textContent.toLowerCase();
+      if (buildingName.includes(input)) {
+        item.style.display = '';
+        matchCount++;
+      }
+         else {
+        item.style.display = 'none';
+      }
+    });
+
+    // Show or hide the dropdown based on matches
+    if (matchCount > 0) {
+      buildingsList.style.display = 'block';
+    } 
+    else {
+      buildingsList.style.display = 'none';
+    }
+  }
+
+  // Handle selecting a building
+  function selectBuilding(buildingName,buildingNum,roomNum) {
+    searchInput.value = buildingName; // Set input value to selected building
+    buildingsList.style.display = 'none'; // Hide the dropdown
+    let selectedBuilding = findObject(buildingNum,roomNum);
+    console.log(selectedBuilding);
+    highlightsFeature(buildingNum,roomNum);
+  }
+
+  searchInput.addEventListener('keyup', filterBuildings); // filters after every letter addition
+  createQuickSearch(); // Initialize the search functionality
+});
+
+
 
 document.addEventListener('DOMContentLoaded', function () {
   const uiContainer = document.querySelector('.ui-buttons-container');
@@ -128,14 +205,8 @@ document.addEventListener('DOMContentLoaded', function () {
         highlightsFeature(buildingNumber, null);
       }
     }
-  });
-});
-
-
-
-
-
-
+  })
+})
 
 //-------------------------------- HIGHLIGHTS  FEATURE --------------------------------
 
@@ -186,7 +257,6 @@ function findObject(buildingNumber, roomNumber) {
       }
     }
   });
-
   return objectToHighlight;
 }
 
