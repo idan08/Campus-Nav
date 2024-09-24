@@ -46,7 +46,10 @@ document.addEventListener('DOMContentLoaded',function(){
   function createQuickSearch() {
     db_data.forEach((building) => { //adding every building in database as a list item
       let listItem = document.createElement('li'); //each building is a list-item
-      listItem.textContent = building.room_name +" "+building.room_number+" "+building.building; //text content is name,room number,building number
+      if(building.room_number!='NULL')
+        listItem.textContent = building.room_name +" "+building.room_number+" "+building.building; //text content is name,room number,building number
+      else 
+        listItem.textContent = building.room_name +" "+building.building; //text content is name,building number if there is no room number
       listItem.style.padding = '5px'; 
       listItem.style.borderRadius = "10px";
       listItem.style.textAlign = "right";
