@@ -214,8 +214,8 @@ document.addEventListener('DOMContentLoaded', function () {
         highlightsFeature(buildingNumber, null);
       }
     }
-  })
-})
+  });
+});
 
 //-------------------------------- HIGHLIGHTS  FEATURE --------------------------------
 
