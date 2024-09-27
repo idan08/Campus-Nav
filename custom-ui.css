@@ -215,7 +215,7 @@ body {
 }
 .emergencyButton{
   padding: 5px;
-  margin: 5px;
+  margin: 10px;
   background-color: red; /* צבע רקע אדום */
   color: black; /* צבע טקסט שחור */
   border-radius: 50px; /* גבול עגול */
