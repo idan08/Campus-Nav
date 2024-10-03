@@ -37,7 +37,13 @@ function cleanView() {
   });
   closeNotification()
 }
-
+function colorSafeBuildings(numberOfBuildings){
+    for(let i=0;i<numberOfBuildings.length;i++){
+      let building=findObject(numberOfBuildings[i][0],numberOfBuildings[i][1]);
+      building.material.color.set(0xff0000); 
+      
+    }
+  }
 
 let isColor=true;
 var originalMaterials = new Map();// Map to store original materials
@@ -63,14 +69,9 @@ function colorRedProtectedSafe() {
     }
   });
     //colors the protected buildings in red
-   let building6=findObject(6,null);
-   let building1=findObject(1,null);
-   let building5=findObject(5,217);
-   
-   building6.material.color.set(0xff0000); 
-   building1.material.color.set(0xff0000);
-   building5.material.color.set(0xff0000);
-  isColor=false;
+    var numberOfBuildings=[[6,null],[1,null],[5,217]];
+    colorSafeBuildings(numberOfBuildings);
+    isColor=false;
   }
  // Now, restore the original materials and colors
  else{

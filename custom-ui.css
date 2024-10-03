@@ -213,18 +213,18 @@ body {
   background-color: #007bff;
   color: #fff;
 }
-.emergencyButton{
+.emergencyButton {
   padding: 5px;
   margin: 10px;
-  background-color: red; /* צבע רקע אדום */
-  color: black; /* צבע טקסט שחור */
-  border-radius: 50px; /* גבול עגול */
-  border: none; /* הסרת גבול ברירת מחדל */
-  font-size: 16px; /* גודל גופן (אופציונלי) */
-  cursor: pointer; /* סמן עכבר בצורת יד */
+  background-color: red;
+  color: black; 
+  border-radius: 50px; 
+  border: none; 
+  font-size: 16px; 
+  cursor: pointer;
 }
 
-.emergencyButton:hover{
+.emergencyButton:hover {
   background-color:rgb(0, 98, 255);
   color: white;
 }
