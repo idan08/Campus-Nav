@@ -26,6 +26,49 @@ function cleanView() {
   closeNotification()
 }
 
+//Power save action
+let powerSaveState = false;
+document.getElementById("powerSave").addEventListener("click",()=>{
+  if(!powerSaveState){
+    powerSaveState = true;
+  app.scene.traverse(function (object) {
+    if (object.isMesh && object.userData && object.userData.properties){
+      object.material = new THREE.MeshBasicMaterial({
+        color: object.material.color,
+        flatShading: true,
+      });
+      if (object.castShadow) {
+        object.castShadow = false;
+      }
+      if (object.receiveShadow){ 
+        object.receiveShadow = false;
+      }
+      object.geometry.computeVertexNormals(); // Update vertex normals if needed
+      // Trigger re-render
+      object.material.needsUpdate = true;
+    }
+  });
+}
+else{
+  powerSaveState = false;
+  app.scene.traverse(function (object) {
+    if (object.isMesh && object.userData && object.userData.properties){
+      object.material = materials.pop();
+      }
+      if (object.castShadow) {
+        object.castShadow = true;
+      }
+      if (object.receiveShadow){ 
+        object.receiveShadow = true;
+      }
+      object.geometry.computeVertexNormals(); // Update vertex normals if needed
+      // Trigger re-render
+      object.material.needsUpdate = true;
+});
+}
+  app.render();
+  alert("Hello");
+});
 
 document.addEventListener('DOMContentLoaded', function () {
   const uiContainer = document.querySelector('.ui-buttons-container');
