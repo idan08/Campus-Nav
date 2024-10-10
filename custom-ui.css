@@ -13,12 +13,11 @@
   font-size: 1rem; /* Set a font size if needed */
   border-radius: 15px; /* Adjust for rounded corners */
   border: 2px solid #007bff; /* Blue border */
-  background-color: #f8f8f8; /* White background */
   color: blue;
+  background-color: #dd5236;
 }
 #powerSave:hover {
   cursor: pointer;
-  background-color: #75b1f1;
 }
 
 #notification-popup {
