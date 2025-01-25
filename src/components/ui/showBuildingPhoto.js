@@ -2,11 +2,11 @@
   function displayBuildingPhoto(buildingId) {
     let photoUrl;
     if (buildingId >= 60 && buildingId < 65) {
-        photoUrl = 'hit_photos/img60.jpg'; // Use img60 for buildings with ID between 60 and 64
+        photoUrl = '../../src/assets/images/hit_photos/img60.jpg'; // Use img60 for buildings with ID between 60 and 64
     } else {
-        photoUrl = `hit_photos/img${buildingId}.jpg`; //image files are named img1.jpg, img2.jpg, etc.
+        photoUrl = `../../src/assets/images/hit_photos/img${buildingId}.jpg`; //image files are named img1.jpg, img2.jpg, etc.
     }
-    
+
     // Create or get the existing photo container
     let photoContainer = document.getElementById('buildingPhotoContainer');
     if (!photoContainer) {

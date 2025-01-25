@@ -6,8 +6,8 @@
   <title>CampusNav</title>
   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
   <base target="_blank">
-  <link rel="stylesheet" type="text/css" href="./Qgis2threejs.css">
-  <link rel="stylesheet" type="text/css" href="custom-ui.css">
+  <link rel="stylesheet" type="text/css" href="../src/styles/Qgis2threejs.css">
+  <link rel="stylesheet" type="text/css" href="../src/styles/custom-ui.css">
   <style type="text/css">
     #popup,
     #header,
@@ -29,22 +29,22 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/18.6.4/tween.umd.js"></script>
 
-  <script src="lessonData.js"></script>
+  <script src="../src/data/lessonData.js"></script>
 
-  <script src="dbData.js"></script>
-  <script src="showBuildingPhoto.js"></script>
-  <script src="./threejs/three.min.js"></script>
-  <script src="./threejs/OrbitControls.js"></script>
-  <script src="./threejs/ViewHelper.js"></script>
-  <script type="module" src="./Qgis2threejs.js"></script>
+  <script src="../src/data/database/dbData.js"></script>
+  <script src="../src/components/ui/showBuildingPhoto.js"></script>
+  <script src="../src/lib/three/three.min.js"></script>
+  <script src="../src/lib/three/OrbitControls.js"></script>
+  <script src="../src/lib/three/ViewHelper.js"></script>
+  <script type="module" src="../src/lib/Qgis2threejs.js"></script>
 
-  <script src="database.js"></script>
+  <script src="../src/data/database/database.js"></script>
  
 
   <script src="https://cdn.jsdelivr.net/npm/three@0.110.0/examples/js/loaders/GLTFLoader.js"></script>
 
   <!-- UI JavaScript -->
-  <script type="module" src="ui.js"></script>
+  <script type="module" src="../src/components/ui/ui.js"></script>
   
 </head>
 <body>
@@ -178,7 +178,7 @@
       app.init(container); // initialize viewer
 
       // load the scene
-      app.loadSceneFile("./data/index/scene.js", function (scene) {
+      app.loadSceneFile("../src/data/scene/scene.js", function (scene) {
         // scene file has been loaded
         app.start();
       }, function (scene) {
@@ -200,7 +200,7 @@
 </div>
 
 <!-- Link to external JavaScript file -->
-<script src="showBuildingPhoto.js"></script>
+<script src=".../src/components/ui/showBuildingPhoto.js"></script>
 
 </body>
 
