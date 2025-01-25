@@ -71,13 +71,13 @@ This project is licensed under [MIT License](LICENSE).
 - Special thanks to contributors and the communities of **Three.js** and **QGIS** for their support and resources.
 
 ## Images
-![](assets/Screenshot%202024-11-12%20at%2017.16.23.png)
-![](assets/Screenshot%202024-11-12%20at%2017.17.04.png)
-![](assets/Screenshot%202024-11-12%20at%2017.17.14.png)
-![](assets/Screenshot%202024-11-12%20at%2017.17.26.png)
-![](assets/Screenshot%202024-11-12%20at%2017.18.10.png)
-![](assets/Screenshot%202024-11-12%20at%2017.18.21.png)
-![](assets/Screenshot%202024-11-12%20at%2017.18.30.png)
-![](assets/Screenshot%202024-11-12%20at%2017.18.42.png)
+![](src/assets/images/readme_photos/Screenshot%202024-11-12%20at%2017.16.23.png)
+![](src/assets/images/readme_photos/Screenshot%202024-11-12%20at%2017.17.04.png)
+![](src/assets/images/readme_photos/Screenshot%202024-11-12%20at%2017.17.14.png)
+![](src/assets/images/readme_photos/Screenshot%202024-11-12%20at%2017.17.26.png)
+![](src/assets/images/readme_photos/Screenshot%202024-11-12%20at%2017.18.10.png)
+![](src/assets/images/readme_photos/Screenshot%202024-11-12%20at%2017.18.21.png)
+![](src/assets/images/readme_photos/Screenshot%202024-11-12%20at%2017.18.30.png)
+![](src/assets/images/readme_photos/Screenshot%202024-11-12%20at%2017.18.42.png)
 
 
