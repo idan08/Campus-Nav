@@ -511,92 +511,92 @@ const db_data = [
  {
   "building": 2,
   "floor": 1,
-  "room_number": 1012,
-  "ID": 1012,
+  "room_number": 101,
+  "ID": 101,
   "room_name": "כיתה "
  },
  {
   "building": 2,
   "floor": 1,
-  "room_number": 1022,
-  "ID": 1022,
+  "room_number": 102,
+  "ID": 102,
   "room_name": "כיתה "
  },
  {
   "building": 2,
   "floor": 1,
-  "room_number": 1042,
-  "ID": 1042,
+  "room_number": 104,
+  "ID": 104,
   "room_name": "כיתה "
  },
  {
   "building": 2,
   "floor": 1,
-  "room_number": 1052,
-  "ID": 1052,
+  "room_number": 105,
+  "ID": 105,
   "room_name": "כיתה "
  },
  {
   "building": 2,
   "floor": 1,
-  "room_number": 1062,
-  "ID": 1062,
+  "room_number": 106,
+  "ID": 106,
   "room_name": "כיתה "
  },
  {
   "building": 2,
   "floor": 1,
-  "room_number": 1072,
-  "ID": 1072,
+  "room_number": 107,
+  "ID": 107,
   "room_name": "כיתה "
  },
  {
   "building": 2,
   "floor": 2,
-  "room_number": 2012,
-  "ID": 2012,
+  "room_number": 201,
+  "ID": 201,
   "room_name": "כיתה "
  },
  {
   "building": 2,
   "floor": 2,
-  "room_number": 2022,
-  "ID": 2022,
+  "room_number": 202,
+  "ID": 202,
   "room_name": "כיתה "
  },
  {
   "building": 2,
   "floor": 2,
-  "room_number": 2032,
-  "ID": 2032,
+  "room_number": 203,
+  "ID": 203,
   "room_name": "כיתה "
  },
  {
   "building": 2,
   "floor": 2,
-  "room_number": 2042,
-  "ID": 2042,
+  "room_number": 204,
+  "ID": 204,
   "room_name": "כיתה "
  },
  {
   "building": 2,
   "floor": 2,
-  "room_number": 2052,
-  "ID": 2052,
+  "room_number": 205,
+  "ID": 205,
   "room_name": "כיתה "
  },
  {
   "building": 2,
   "floor": 2,
-  "room_number": 2062,
-  "ID": 2062,
+  "room_number": 206,
+  "ID": 206,
   "room_name": "כיתה "
  },
  {
   "building": 2,
   "floor": 2,
-  "room_number": 2072,
-  "ID": 2072,
+  "room_number": 207,
+  "ID": 207,
   "room_name": "כיתה "
  },
  {

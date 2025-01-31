@@ -412,6 +412,10 @@ document.addEventListener('DOMContentLoaded',function(){
     searchInput.value = buildingName; // Set input value to selected building
     buildingsList.style.display = 'none'; // Hide the dropdown
     let selectedBuilding = findObject(buildingNum,roomNum); //finding the building with given parameters
+    if(buildingNum==1 || buildingNum==3 || buildingNum==6){ //Marking the building for rooms in buildings 1/3/6 until models for each room are added to the buildings
+      highlightsFeature(buildingNum);
+    }
+    else
     highlightsFeature(buildingNum,roomNum); //highlights building
   }
 
