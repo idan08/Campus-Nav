@@ -107,17 +107,15 @@ document.addEventListener('DOMContentLoaded', function () {
 /*//////////////////////nigth mood////////////////////////////////*/
 document.addEventListener('DOMContentLoaded', () => {
   Q3D.application.addEventListener('sceneLoaded', () => {
-    const nightModeButton = document.getElementById('NightModeBtn'); // שימוש ב-ID החדש
+    const nightModeButton = document.getElementById('NightModeBtn');
     const body = document.body;
 
-    // בדיקה אם מצב לילה כבר שמור ב-localStorage
     if (localStorage.getItem('nightMode') === 'true') {
       body.classList.add('night-mode');
       setNightMode(true);
       nightModeButton.textContent = 'Day Mode';
     }
 
-    // אירוע לחיצה על הכפתור
     nightModeButton.addEventListener('click', () => {
       const isEnabled = body.classList.toggle('night-mode');
       localStorage.setItem('nightMode', isEnabled);
@@ -127,64 +125,42 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-
 function setNightMode(enabled) {
-  var canvas = document.createElement("canvas");
-  canvas.width = app.renderer.domElement.width;
-  canvas.height = app.renderer.domElement.height;
+  const sceneBackgroundColor = enabled ? 0x111111 : 0xadd8e6;
+  app.scene.background = new THREE.Color(sceneBackgroundColor);
 
-  var ctx = canvas.getContext("2d");
+  app.scene.children.forEach(child => {
+    if (child.isLight) {
+      child.intensity = enabled ? 0.2 : 1.0;
+      child.color.set(enabled ? 0x9999ff : 0xffffff);
+    }
+  });
 
   if (enabled) {
-    // מצב לילה: שחור כהה למעלה, אפור כהה למטה
-    var grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
-    grad.addColorStop(0, "#000000"); // שחור למעלה
-    grad.addColorStop(0.5, "#1a1a1a"); // אפור כהה באמצע
-    grad.addColorStop(1, "#d3d3d3"); // אפור כהה בתחתית
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // הגדרת הטקסטורה כקנבס
-    const texture = new THREE.CanvasTexture(canvas);
-    app.scene.background = texture;
-
-    // תאורה למצב לילה
-    app.scene.children.forEach(child => {
-      if (child.isLight) {
-        child.intensity = 0.3;
-      }
-    });
-    
+    addNightLights();
   } else {
-    // מצב יום: כחול בהיר למעלה, לבן למטה
-    var grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
-    grad.addColorStop(0, "#add8e6"); // כחול בהיר
-    grad.addColorStop(0.5, "#ffffff"); // לבן באמצע
-    grad.addColorStop(1, "#f0f9ff"); // לבן-כחול בתחתית
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // הגדרת הטקסטורה כקנבס
-    const texture = new THREE.CanvasTexture(canvas);
-    app.scene.background = texture;
-
-    // תאורה למצב יום
-    app.scene.children.forEach(child => {
-      if (child.isLight) {
-        child.intensity = 1.0;
-      }
-    });
+    removeNightLights();
   }
-
-  // רענון הסצנה
   app.renderer.render(app.scene, app.camera);
 }
+
 function addNightLights() {
-  const pointLight = new THREE.PointLight(0xffa500, 0.5, 50); // תאורה חמה
-  pointLight.position.set(0, 10, 10);
-  app.scene.add(pointLight);
+  removeNightLights();
+
+  const streetLight = new THREE.PointLight(0xffa500, 0.5, 100);
+  streetLight.position.set(0, 10, 15);
+  streetLight.name = "night_light";
+  app.scene.add(streetLight);
+
+  const moonLight = new THREE.DirectionalLight(0x5555ff, 0.3);
+  moonLight.position.set(50, 50, 50);
+  moonLight.name = "night_light";
+  app.scene.add(moonLight);
 }
 
+function removeNightLights() {
+  app.scene.children = app.scene.children.filter(object => object.name !== "night_light");
+}
 
 
 
