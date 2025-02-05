@@ -9,6 +9,49 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 
+////////////////////// **Trails**/////////////////////////// 
+import trailsData from './trailsData.js';
+//Coordinates of every trail
+trailsData.forEach(trail => {
+let start = new THREE.Vector3(trail.x1,trail.y1,0.3);
+let end = new THREE.Vector3(trail.x2,trail.y2,0.3);
+// Calculate the road's length and direction
+const direction = new THREE.Vector3().subVectors(end, start); // Vector from start to end
+const roadLength = direction.length(); // Length of the road
+
+// Create a plane for the road
+const roadWidth = 3; // Width of the road
+const roadGeometry = new THREE.PlaneGeometry(roadLength, roadWidth);
+
+// Create a material for the road
+const roadMaterial = new THREE.MeshBasicMaterial({
+  color: 0x808080, // Dark gray (road-like)
+  side: THREE.DoubleSide,
+});
+
+// Create the road mesh
+const road = new THREE.Mesh(roadGeometry, roadMaterial);
+// Align the road with the direction
+// Rotate the road to align with the direction in 3D
+const axis = new THREE.Vector3(1, 0, 0); // Default direction for the plane (aligned with X-axis)
+const quaternion = new THREE.Quaternion(); // Create a quaternion
+quaternion.setFromUnitVectors(axis, direction.clone().normalize()); // Align the Z-axis with the direction
+road.applyQuaternion(quaternion);
+
+// Position the road between the two points
+const midpoint = new THREE.Vector3().addVectors(start, end).multiplyScalar(0.5); // Midpoint of the two points
+road.position.copy(midpoint);
+
+// Add the line to the Three.js scene
+document.addEventListener('DOMContentLoaded', function () {
+Q3D.application.addEventListener("sceneLoaded", function () {
+console.log("Scene loaded, adding trails...");
+app.scene.add(road);
+app.renderer.render(app.scene, app.camera); // רענון הסצנה לאחר הוספת השערים 
+});
+});
+});
+
 ////////////////////// ***GATES***///////////////////////////
 const gatesData = [
   {
